@@ -185,6 +185,29 @@ npm run build
 npm run preview
 \`\`\`
 
+## 🚀 Deployment
+
+### Deploy to Railway (Recommended)
+
+Railway provides free hosting with WebSocket support - perfect for this app!
+
+**Quick Deploy:**
+1. Push your code to GitHub
+2. Go to [Railway.app](https://railway.app)
+3. Click "Start a New Project" → "Deploy from GitHub repo"
+4. Select your repo
+5. Railway will auto-deploy both backend and frontend
+
+**Detailed instructions:** See [RAILWAY_DEPLOYMENT.md](./RAILWAY_DEPLOYMENT.md)
+
+### Alternative Platforms
+
+- **Render.com** - Full-stack hosting with WebSocket support
+- **Fly.io** - Edge deployment with WebSocket
+- **DigitalOcean App Platform** - Container-based deployment
+
+**Note:** Vercel and Netlify don't support WebSocket, so they're not suitable for the backend.
+
 ## 🧪 Testing
 
 The application supports manual testing:

@@ -16,7 +16,7 @@ app = FastAPI(title="LiveCode Session API")
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:5173").split(","),
+    allow_origins=["*"],  # In production, specify your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -238,9 +238,10 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str, role: str = 
 
 if __name__ == "__main__":
     import uvicorn
+    port = int(os.getenv("PORT", 8000))
     uvicorn.run(
         "main:app",
-        host=os.getenv("HOST", "0.0.0.0"),
-        port=int(os.getenv("PORT", 8000)),
-        reload=True
+        host="0.0.0.0",
+        port=port,
+        reload=False  # Disable reload in production
     )
