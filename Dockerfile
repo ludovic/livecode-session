@@ -9,8 +9,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend application
 COPY backend/ .
 
-# Expose port
-EXPOSE 8000
-
-# Use exec form for CMD to ensure proper signal handling
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Railway will use the startCommand from railway.json instead of this CMD
+# This CMD is here as a fallback for local Docker runs
+CMD ["hypercorn", "main:app", "--bind", "0.0.0.0:8000"]
