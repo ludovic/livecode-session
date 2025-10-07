@@ -10,8 +10,24 @@ from typing import Dict, Set, Optional
 import uuid
 import json
 from datetime import datetime
+from contextlib import asynccontextmanager
 
-app = FastAPI(title="LiveCode Session API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan event handler for startup and shutdown"""
+    # Startup
+    port = os.getenv("PORT", "8000")
+    env = os.getenv("RAILWAY_ENVIRONMENT", "local")
+    print(f"🚀 LiveCode Session Backend starting on port {port}")
+    print(f"📊 Environment: {env}")
+    print(f"💾 Sessions initialized: 0")
+    
+    yield
+    
+    # Shutdown
+    print("👋 Shutting down LiveCode Session Backend")
+
+app = FastAPI(title="LiveCode Session API", lifespan=lifespan)
 
 # CORS configuration
 app.add_middleware(
@@ -49,6 +65,16 @@ session_connections: Dict[str, Set[WebSocket]] = {}
 async def root():
     """Health check endpoint"""
     return {"status": "ok", "message": "LiveCode Session API is running"}
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Railway"""
+    return {
+        "status": "healthy",
+        "timestamp": datetime.now().isoformat(),
+        "sessions": len(sessions),
+        "port": os.getenv("PORT", "8000")
+    }
 
 @app.post("/sessions", response_model=Session)
 async def create_session(session_data: SessionCreate):
